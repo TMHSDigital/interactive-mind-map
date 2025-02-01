@@ -1,0 +1,21 @@
+{
+  "name": "interactive-mind-map",
+  "version": "1.0.0",
+  "description": "A fully client-side interactive mind map generator",
+  "main": "js/app.js",
+  "scripts": {
+    "start": "serve .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "mind-map",
+    "visualization",
+    "d3js",
+    "javascript"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "serve": "^14.2.1"
+  }
+} 
