@@ -7,6 +7,13 @@ A fully client-side interactive mind map generator that lets users create, modif
 
 🔗 [Try it now!](https://tmhsdigital.github.io/interactive-mind-map/)
 
+## Documentation
+
+- 📖 [User Guide](docs/user-guide.md) - Complete guide for using the mind map generator
+- 🔧 [Technical Documentation](docs/technical.md) - Architecture and implementation details
+- 📚 [API Documentation](docs/api.md) - Detailed API reference
+- 🤝 [Contributing Guide](docs/contributing.md) - How to contribute to the project
+
 ## Features
 
 - 🎯 Interactive Graph Visualization with force-directed layout
@@ -16,7 +23,7 @@ A fully client-side interactive mind map generator that lets users create, modif
 - 📤 Export options (PNG image and JSON data)
 - 📱 Responsive design for desktop and mobile
 
-## Getting Started
+## Quick Start
 
 1. Visit the [live demo](https://tmhsdigital.github.io/interactive-mind-map/)
 2. Click anywhere to add a root node
@@ -56,7 +63,7 @@ npm start
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+We welcome contributions! Please see our [Contributing Guide](docs/contributing.md) for details.
 
 ## License
 
