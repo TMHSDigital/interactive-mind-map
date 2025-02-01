@@ -62,6 +62,7 @@ body {
     color: var(--text-light);
     transition: all var(--transition-fast);
     position: relative;
+    overflow: hidden;
 }
 
 .toolbar button:hover {
@@ -71,7 +72,7 @@ body {
 }
 
 .toolbar button:active {
-    transform: translateY(0);
+    transform: scale(0.95);
 }
 
 .toolbar button:disabled {
@@ -99,6 +100,35 @@ body {
     margin: 0 4px;
 }
 
+.toolbar button:after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.5);
+    opacity: 0;
+    border-radius: 100%;
+    transform: scale(1, 1) translate(-50%);
+    transform-origin: 50% 50%;
+}
+
+.toolbar button:active:after {
+    animation: ripple 0.4s ease-out;
+}
+
+@keyframes ripple {
+    0% {
+        transform: scale(0, 0);
+        opacity: 0.5;
+    }
+    100% {
+        transform: scale(20, 20);
+        opacity: 0;
+    }
+}
+
 /* Mind map container */
 #mindmap-container {
     width: 100vw;
@@ -117,19 +147,18 @@ body {
     stroke: var(--primary-color);
     stroke-width: 2px;
     cursor: pointer;
-    transition: all var(--transition-normal);
+    transition: all 0.2s ease;
     filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.2));
 }
 
 .node:hover circle {
-    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.25));
-    transform: scale(1.05);
+    filter: brightness(1.1);
+    cursor: pointer;
 }
 
 .node.selected circle {
-    stroke: var(--primary-dark);
-    stroke-width: 3px;
-    filter: drop-shadow(0 4px 8px rgba(33, 150, 243, 0.3));
+    filter: brightness(1.05);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
 .node-label {
@@ -152,13 +181,13 @@ body {
     stroke: #ccc;
     stroke-width: 2px;
     stroke-opacity: 0.6;
-    transition: all var(--transition-normal);
+    transition: stroke 0.2s ease;
     filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
 }
 
 .link:hover {
-    stroke-opacity: 1;
     stroke: var(--primary-color);
+    stroke-width: 2px;
 }
 
 /* Modal styles */
@@ -288,6 +317,22 @@ body {
     display: block;
 }
 
+.loading:after {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
 /* Responsive adjustments */
 @media (max-width: 600px) {
     .toolbar {
@@ -321,4 +366,32 @@ body {
 
 .scale-in {
     animation: scaleIn var(--transition-normal);
+}
+
+/* Tooltip styles */
+[data-tooltip] {
+    position: relative;
+}
+
+[data-tooltip]:before {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 5px 10px;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s, visibility 0.2s;
+    z-index: 1000;
+}
+
+[data-tooltip]:hover:before {
+    opacity: 1;
+    visibility: visible;
 } 

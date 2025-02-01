@@ -20,36 +20,39 @@
 <body>
     <!-- Toolbar -->
     <div class="toolbar">
-        <button id="add-node" title="Add Node">
+        <button id="add-node" data-tooltip="Add Node (Enter/Insert)">
             <span class="material-icons">add_circle</span>
         </button>
-        <button id="edit-node" title="Edit Node" disabled>
+        <button id="edit-node" data-tooltip="Edit Node (F2/E)" disabled>
             <span class="material-icons">edit</span>
         </button>
-        <button id="delete-node" title="Delete Node" disabled>
+        <button id="delete-node" data-tooltip="Delete Node (Delete/Backspace)" disabled>
             <span class="material-icons">delete</span>
         </button>
         <div class="separator"></div>
-        <button id="export-png" title="Export as PNG">
+        <button id="export-png" data-tooltip="Export as PNG">
             <span class="material-icons">image</span>
         </button>
-        <button id="export-json" title="Export as JSON">
+        <button id="export-json" data-tooltip="Export as JSON">
             <span class="material-icons">code</span>
         </button>
         <div class="separator"></div>
-        <button id="zoom-in" title="Zoom In">
+        <button id="zoom-in" data-tooltip="Zoom In (Ctrl + +)">
             <span class="material-icons">zoom_in</span>
         </button>
-        <button id="zoom-out" title="Zoom Out">
+        <button id="zoom-out" data-tooltip="Zoom Out (Ctrl + -)">
             <span class="material-icons">zoom_out</span>
         </button>
-        <button id="reset-view" title="Reset View">
+        <button id="reset-view" data-tooltip="Reset View (Ctrl + 0)">
             <span class="material-icons">center_focus_strong</span>
         </button>
-        <button id="refresh-view" title="Refresh Layout">
+        <button id="refresh-view" data-tooltip="Refresh Layout (R)">
             <span class="material-icons">refresh</span>
         </button>
     </div>
+
+    <!-- Loading indicator -->
+    <div class="loading"></div>
 
     <!-- Main mind map container -->
     <div id="mindmap-container"></div>

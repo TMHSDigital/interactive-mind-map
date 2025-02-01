@@ -6,6 +6,7 @@ class MindMapApp {
         this.initializeVisualization();
         this.initializeEventListeners();
         this.bindModelUpdates();
+        this.initializeKeyboardShortcuts();
 
         // Initial load of data
         const data = model.data;
@@ -145,17 +146,74 @@ class MindMapApp {
         document.getElementById('delete-node').disabled = !hasSelection;
     }
 
+    initializeKeyboardShortcuts() {
+        document.addEventListener('keydown', (e) => {
+            // Only handle shortcuts if not in input/textarea
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+                return;
+            }
+
+            // Add node: Enter or Insert
+            if ((e.key === 'Enter' || e.key === 'Insert') && !e.ctrlKey) {
+                e.preventDefault();
+                document.getElementById('add-node').click();
+            }
+
+            // Delete node: Delete or Backspace
+            if ((e.key === 'Delete' || e.key === 'Backspace') && this.visualization.selectedNode) {
+                e.preventDefault();
+                document.getElementById('delete-node').click();
+            }
+
+            // Edit node: F2 or E
+            if ((e.key === 'F2' || e.key.toLowerCase() === 'e') && this.visualization.selectedNode) {
+                e.preventDefault();
+                document.getElementById('edit-node').click();
+            }
+
+            // Zoom controls
+            if (e.ctrlKey) {
+                if (e.key === '=' || e.key === '+') {
+                    e.preventDefault();
+                    document.getElementById('zoom-in').click();
+                } else if (e.key === '-') {
+                    e.preventDefault();
+                    document.getElementById('zoom-out').click();
+                } else if (e.key === '0') {
+                    e.preventDefault();
+                    document.getElementById('reset-view').click();
+                }
+            }
+
+            // Refresh view: R
+            if (e.key.toLowerCase() === 'r' && !e.ctrlKey) {
+                e.preventDefault();
+                document.getElementById('refresh-view').click();
+            }
+        });
+    }
+
     showNodeModal(title, initialText = '', callback) {
-        const modal = document.getElementById('node-modal');
-        const titleElement = modal.querySelector('h2');
+        document.getElementById('node-modal').classList.add('active');
         const textInput = document.getElementById('node-text');
-        
-        titleElement.textContent = title;
         textInput.value = initialText;
+        document.querySelector('.modal-content h2').textContent = title;
         this.currentModalCallback = callback;
         
-        modal.classList.add('active');
-        textInput.focus();
+        // Focus and select text
+        setTimeout(() => {
+            textInput.focus();
+            textInput.select();
+        }, 100);
+
+        // Add Escape key to close modal
+        const escHandler = (e) => {
+            if (e.key === 'Escape') {
+                this.hideNodeModal();
+                document.removeEventListener('keydown', escHandler);
+            }
+        };
+        document.addEventListener('keydown', escHandler);
     }
 
     hideNodeModal() {
