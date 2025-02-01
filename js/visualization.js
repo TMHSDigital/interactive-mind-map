@@ -45,18 +45,49 @@ class MindMapVisualization {
             .attr('xoverflow', 'visible')
             .append('svg:path')
             .attr('d', 'M 0,-5 L 10 ,0 L 0,5')
-            .attr('fill', '#999')
+            .attr('fill', '#ccc')
             .style('stroke', 'none');
+
+        // Add gradient definitions
+        const defs = this.svg.select('defs');
+        
+        // Node gradient
+        const nodeGradient = defs.append('radialGradient')
+            .attr('id', 'nodeGradient')
+            .attr('cx', '30%')
+            .attr('cy', '30%');
+
+        nodeGradient.append('stop')
+            .attr('offset', '0%')
+            .attr('stop-color', 'white');
+
+        nodeGradient.append('stop')
+            .attr('offset', '100%')
+            .attr('stop-color', '#f8f9fa');
+
+        // Selected node gradient
+        const selectedGradient = defs.append('radialGradient')
+            .attr('id', 'selectedGradient')
+            .attr('cx', '30%')
+            .attr('cy', '30%');
+
+        selectedGradient.append('stop')
+            .attr('offset', '0%')
+            .attr('stop-color', 'white');
+
+        selectedGradient.append('stop')
+            .attr('offset', '100%')
+            .attr('stop-color', '#e3f2fd');
     }
 
     initializeForces() {
         // Initialize force simulation
         this.simulation = d3.forceSimulation()
-            .force('link', d3.forceLink().id(d => d.id).distance(100))
-            .force('charge', d3.forceManyBody().strength(-300))
-            .force('x', d3.forceX(this.width / 2))
-            .force('y', d3.forceY(this.height / 2))
-            .force('collision', d3.forceCollide().radius(50));
+            .force('link', d3.forceLink().id(d => d.id).distance(120))
+            .force('charge', d3.forceManyBody().strength(-500))
+            .force('x', d3.forceX(this.width / 2).strength(0.1))
+            .force('y', d3.forceY(this.height / 2).strength(0.1))
+            .force('collision', d3.forceCollide().radius(60));
     }
 
     initializeZoom() {
@@ -106,9 +137,9 @@ class MindMapVisualization {
 
         // Add circle to each node
         nodesEnter.append('circle')
-            .attr('r', 20)
-            .attr('fill', d => d.color || '#4CAF50')
-            .attr('stroke', '#388E3C')
+            .attr('r', 30)
+            .attr('fill', 'url(#nodeGradient)')
+            .attr('stroke', d => d.color || '#2196F3')
             .attr('stroke-width', 2);
 
         // Add text to each node
@@ -121,7 +152,8 @@ class MindMapVisualization {
 
         // Update node colors and labels
         this.nodes.select('circle')
-            .attr('fill', d => d.color || '#4CAF50');
+            .attr('fill', d => d.selected ? 'url(#selectedGradient)' : 'url(#nodeGradient)')
+            .attr('stroke', d => d.color || '#2196F3');
         
         this.nodes.select('text')
             .text(d => d.label);
@@ -155,14 +187,16 @@ class MindMapVisualization {
     selectNode(nodeId) {
         this.selectedNode = nodeId;
         this.nodes.select('circle')
-            .attr('stroke', d => d.id === nodeId ? '#2196F3' : '#388E3C')
+            .attr('fill', d => d.id === nodeId ? 'url(#selectedGradient)' : 'url(#nodeGradient)')
+            .attr('stroke', d => d.id === nodeId ? '#1976D2' : (d.color || '#2196F3'))
             .attr('stroke-width', d => d.id === nodeId ? 3 : 2);
     }
 
     deselectNode() {
         this.selectedNode = null;
         this.nodes.select('circle')
-            .attr('stroke', '#388E3C')
+            .attr('fill', 'url(#nodeGradient)')
+            .attr('stroke', d => d.color || '#2196F3')
             .attr('stroke-width', 2);
     }
 
