@@ -6,6 +6,13 @@ class MindMapApp {
         this.initializeVisualization();
         this.initializeEventListeners();
         this.bindModelUpdates();
+
+        // Initial load of data
+        const data = model.data;
+        if (data.nodes.length > 0) {
+            this.visualization.update(data);
+            this.visualization.refreshView();
+        }
     }
 
     initializeVisualization() {
@@ -88,6 +95,11 @@ class MindMapApp {
 
         document.getElementById('reset-view').addEventListener('click', () => {
             this.visualization.resetZoom();
+        });
+
+        // New refresh button
+        document.getElementById('refresh-view').addEventListener('click', () => {
+            this.visualization.refreshView();
         });
 
         // Modal events

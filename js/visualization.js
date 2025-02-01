@@ -33,24 +33,34 @@ class MindMapVisualization {
         // Add zoom container
         this.g = this.svg.append('g');
 
-        // Add arrow marker definition
-        this.svg.append('defs').append('marker')
-            .attr('id', 'arrowhead')
-            .attr('viewBox', '-0 -5 10 10')
-            .attr('refX', 20)
-            .attr('refY', 0)
-            .attr('orient', 'auto')
-            .attr('markerWidth', 6)
-            .attr('markerHeight', 6)
-            .attr('xoverflow', 'visible')
-            .append('svg:path')
-            .attr('d', 'M 0,-5 L 10 ,0 L 0,5')
-            .attr('fill', '#ccc')
-            .style('stroke', 'none');
-
-        // Add gradient definitions
-        const defs = this.svg.select('defs');
+        // Add arrow marker definition with improved positioning
+        const defs = this.svg.append('defs');
         
+        defs.append('marker')
+            .attr('id', 'arrowhead')
+            .attr('viewBox', '0 -5 10 10')
+            .attr('refX', 35) // Increased to account for node radius
+            .attr('refY', 0)
+            .attr('markerWidth', 8)
+            .attr('markerHeight', 8)
+            .attr('orient', 'auto')
+            .append('path')
+            .attr('d', 'M0,-5L10,0L0,5')
+            .attr('fill', '#ccc');
+
+        // Add hover state arrow
+        defs.append('marker')
+            .attr('id', 'arrowhead-hover')
+            .attr('viewBox', '0 -5 10 10')
+            .attr('refX', 35) // Increased to account for node radius
+            .attr('refY', 0)
+            .attr('markerWidth', 8)
+            .attr('markerHeight', 8)
+            .attr('orient', 'auto')
+            .append('path')
+            .attr('d', 'M0,-5L10,0L0,5')
+            .attr('fill', 'var(--primary-color)');
+
         // Node gradient
         const nodeGradient = defs.append('radialGradient')
             .attr('id', 'nodeGradient')
@@ -108,7 +118,7 @@ class MindMapVisualization {
     }
 
     update(data) {
-        // Create links
+        // Create links with proper arrow markers
         this.links = this.g.selectAll('.link')
             .data(data.links, d => `${d.source.id}-${d.target.id}`);
 
@@ -117,7 +127,15 @@ class MindMapVisualization {
         const linksEnter = this.links.enter()
             .append('line')
             .attr('class', 'link')
-            .attr('marker-end', 'url(#arrowhead)');
+            .attr('marker-end', 'url(#arrowhead)')
+            .on('mouseover', function() {
+                d3.select(this)
+                    .attr('marker-end', 'url(#arrowhead-hover)');
+            })
+            .on('mouseout', function() {
+                d3.select(this)
+                    .attr('marker-end', 'url(#arrowhead)');
+            });
 
         this.links = linksEnter.merge(this.links);
 
@@ -287,6 +305,14 @@ class MindMapVisualization {
                 });
             };
         });
+    }
+
+    // Add a new method to refresh the view
+    refreshView() {
+        if (this.simulation) {
+            this.simulation.alpha(1).restart();
+        }
+        this.resetZoom();
     }
 }
 
