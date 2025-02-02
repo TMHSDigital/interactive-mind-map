@@ -67,4 +67,4 @@ We welcome contributions! Please see our [Contributing Guide](docs/contributing.
 
 ## License
 
-MIT License - feel free to use and modify for your own projects!
+GPL-3.0
